@@ -31,6 +31,20 @@ RUN apt-get -y install vim git sudo zip bzip2 fontconfig curl
 RUN apt-get -y install maven
 
 
+# configure the "jimternet" and "root" users
+RUN echo 'root:jimternet' |chpasswd
+RUN groupadd jimternet && useradd jimternet -s /bin/bash -m -g jimternet -G jimternet && adduser jimternet sudo
+RUN echo 'jimternet:jimternet' |chpasswd
+
+
+# install the sample app to download all Maven dependencies
+RUN cd /home/jimternet && \
+    wget https://github.com/jimternet/docker-app-demo/archive/init.zip && \
+    unzip init.zip && \
+    rm init.zip
+RUN cd /home && chown -R jimternet:jimternet /home/jimternet
+RUN cd /home/jimternet/docker-app-demo-init && sudo -u jimternet mvn dependency:go-offline && java -jar target/docker.demo-0.0.1-SNAPSHOT.jar
+
 
 
 # expose the working directory, the Tomcat port, the Grunt server port, the SSHD port, and run SSHD

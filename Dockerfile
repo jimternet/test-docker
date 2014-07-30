@@ -43,8 +43,7 @@ RUN cd /home/jimternet && \
     unzip init.zip && \
     rm init.zip
 RUN cd /home && chown -R jimternet:jimternet /home/jimternet
-RUN cd /home/jimternet/docker-app-demo-init && sudo -u jimternet mvn dependency:go-offline && java -jar target/docker.demo-0.0.1-SNAPSHOT.jar
-
+RUN cd /home/jimternet/docker-app-demo-init && sudo -u jimternet mvn dependency:go-offline
 
 
 # expose the working directory, the Tomcat port, the Grunt server port, the SSHD port, and run SSHD
